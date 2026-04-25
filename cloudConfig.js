@@ -1,0 +1,23 @@
+ require("dotenv").config(); // 🔥 add this top la
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,       // ✅ FIXED
+  api_secret: process.env.CLOUD_API_SECRET, // ✅ FIXED
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "wonderlust_DEV",
+    allowed_formats: ["png", "jpg", "jpeg"], // ✅ FIXED
+  },
+});
+
+module.exports = {
+  cloudinary,
+  storage,
+};

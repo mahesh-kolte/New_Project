@@ -1,0 +1,151 @@
+ /* ===== BODY FIX ===== */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+  flex: 1;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  height: 5rem;
+  background-color: white;
+}
+
+.fa-compass {
+  color: #fe424d;
+  font-size: 2rem;
+}
+
+.nav-link {
+  color: #222222 !important;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  margin-top: auto;
+}
+
+.f-info {
+  text-align: center;
+  height: 8rem;
+  background-color: #ebebeb;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.f-info-links,
+.f-info-social,
+.f-info-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.f-info-links a {
+  text-decoration: none;
+}
+
+.f-info-links a:hover {
+  text-decoration: underline;
+}
+
+.f-info-social i {
+  font-size: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+/* ===== LISTING CARDS (MODERN UI 🔥) ===== */
+.listing-card {
+  border: none !important;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  background: #fff;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* 🔥 HOVER EFFECT */
+.listing-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.2);
+}
+
+/* IMAGE */
+.card-img-top {
+  height: 18rem;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* IMAGE ZOOM EFFECT 🔥 */
+.listing-card:hover .card-img-top {
+  transform: scale(1.08);
+}
+
+/* CARD BODY */
+.card-body {
+  padding: 1rem;
+}
+
+/* TITLE */
+.card-text b {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* PRICE */
+.card-text {
+  color: #444;
+  font-size: 0.95rem;
+}
+
+/* LINK */
+.listing-link {
+  text-decoration: none;
+  color: black;
+  display: block;
+}
+
+/* ===== IMAGE OVERLAY ===== */
+.card-img-overlay {
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+.listing-card:hover .card-img-overlay {
+  opacity: 0.08;
+  background-color: #000;
+}
+
+/* ===== BUTTONS ===== */
+.add-btn,
+.edit-btn {
+  color: #fe424d !important;
+  border: none !important;
+}
+
+.btns {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ===== SHOW PAGE ===== */
+.show-img {
+  height: 30vh;
+  object-fit: cover;
+}
+
+.show-card {
+  padding-left: 0;
+  padding-right: 0;
+}
