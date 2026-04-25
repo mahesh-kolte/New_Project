@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const ExpressError = require("./utils/expressError.js");
+const expressError = require("./utils/expressError.js");
 
 const listingsRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
