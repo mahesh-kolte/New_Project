@@ -16,11 +16,11 @@ const reviewController = require("../controllers/reviews.js");
 );
 
 // DELETE REVIEW
-router.delete(
+ router.delete(
   "/:reviewId",
   isLoggedIn,
-  isReviewAuthor,
-  wrapAsync( reviewController.destroyReview)
+  isReviewAuthor, // 👈 इथे add कर
+  wrapAsync(reviewController.destroyReview)
 );
 
 module.exports = router;

@@ -13,8 +13,8 @@ module.exports.index = async (req, res) => {
     AllListings = await Listing.find({
       $or: [
         { location: { $regex: search, $options: "i" } },
-        { title: { $regex: search, $options: "i" } }
-      ]
+        { title: { $regex: search, $options: "i" } },
+      ],
     });
   } else {
     AllListings = await Listing.find({});
@@ -27,21 +27,35 @@ module.exports.renderNewFrom = (req, res) => {
   res.render("listings/new.ejs");
 };
 
-module.exports.showListing = async (req, res) => {
+ module.exports.showListing = async (req, res) => {
   const listing = await Listing.findById(req.params.id)
+    .populate("owner")   // 👈 FIRST
     .populate({
       path: "reviews",
-      populate: { path: "author" }, // 🔥 important
-    })
-    .populate("owner");
+      populate: { path: "author" },
+    });
 
   if (!listing) {
-    req.flash("error", "Listing you requested does not exist!");
+    req.flash("error", "Listing not found!");
     return res.redirect("/listings");
   }
-
-  res.render("listings/show.ejs", { listing });
+   res.render("listings/show.ejs", { listing });
 };
+// module.exports.showListing = async (req, res) => {
+//   const listing = await Listing.findById(req.params.id)
+//     .populate({
+//       path: "reviews",
+//       populate: { path: "author" }, // 🔥 important
+//     })
+//     .populate("owner");
+
+//   if (!listing) {
+//     req.flash("error", "Listing you requested does not exist!");
+//     return res.redirect("/listings");
+//   }
+
+//   res.render("listings/show.ejs", { listing });
+// };
 
 module.exports.createListing = async (req, res) => {
   let url = req.file.path;
@@ -63,9 +77,9 @@ module.exports.renderEditFrom = async (req, res) => {
     req.flash("error", "Listing you requested does not exist!");
     return res.redirect("/listings");
   }
-let currentImageUrl = listing.image.url;
-currentImageUrl = currentImageUrl.replace("/upload/", "/upload/w_200/"); // Resize image to width of 200px
-  res.render("listings/edit.ejs", { listing , currentImageUrl });
+  let currentImageUrl = listing.image.url;
+  currentImageUrl = currentImageUrl.replace("/upload/", "/upload/w_200/"); // Resize image to width of 200px
+  res.render("listings/edit.ejs", { listing, currentImageUrl });
 };
 
 module.exports.upadateListing = async (req, res) => {
@@ -73,7 +87,7 @@ module.exports.upadateListing = async (req, res) => {
     req.params.id,
     req.body.listing,
   );
-  if(typeof req.file !== "undefined") {
+  if (typeof req.file !== "undefined") {
     let url = req.file.path;
     let filename = req.file.filename;
     listing.image = { url, filename };
@@ -90,5 +104,3 @@ module.exports.destroy = async (req, res) => {
   req.flash("success", "Listing Deleted!");
   res.redirect("/listings");
 };
-
- 

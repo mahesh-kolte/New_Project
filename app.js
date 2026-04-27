@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const expressError = require("./utils/expressError.js");
+const ExpressError = require("./utils/expressError.js");
 
 const listingsRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
@@ -16,7 +16,6 @@ const userRouter = require("./routes/user.js");
 
 const flash = require("connect-flash");
 const session = require("express-session");
-const MongoStore = require("connect-mongo").default;
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
@@ -40,27 +39,12 @@ async function main() {
     await mongoose.connect(MONGO_URL);
     console.log("✅ Connected to MongoDB");
 
-    // ================= SESSION STORE =================
-    const store = MongoStore.create({
-      mongoUrl: MONGO_URL,
-      crypto: {
-        secret: process.env.SECRET, // ✅ FIXED
-      },
-      touchAfter: 24 * 60 * 60,
-    });
-
-    store.on("error", (err) => {
-      console.log("Session Store Error:", err);
-    });
-
-    // ================= SESSION =================
+    // ================= SESSION (NO MongoStore) =================
     const sessionOptions = {
-      store,
-      secret: process.env.SECRET, // ✅ FIXED
+      secret: process.env.SECRET || "mysupersecret",
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: false,
       cookie: {
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 3,
         maxAge: 1000 * 60 * 60 * 24 * 3,
         httpOnly: true,
       },
@@ -85,17 +69,27 @@ async function main() {
       next();
     });
 
+    // app.get("/", (req, res) => {
+    //   res.redirect("/listings");
+    // });
+
     // ================= ROUTES =================
     app.use("/listings", listingsRouter);
     app.use("/listings/:id/reviews", reviewRouter);
     app.use("/", userRouter);
 
     // ================= ERROR HANDLING =================
-    app.use((req, res, next) => {
+    app.use("/",(req, res, next) => {
       next(new ExpressError(404, "Page Not Found"));
     });
 
     app.use((err, req, res, next) => {
+      console.log("🔥 ERROR LOCATION:", err.stack);
+
+      if (res.headersSent) {
+        return next(err);
+      }
+
       let { statusCode = 500, message = "Something went wrong" } = err;
       res.status(statusCode).render("error.ejs", { message });
     });

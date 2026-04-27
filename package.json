@@ -1,5 +1,5 @@
 {
-  "engines":{
+  "engines": {
     "node": "24.14.0"
   },
   "name": "major_project",
@@ -17,7 +17,7 @@
     "axios": "^1.15.2",
     "cloudinary": "^1.41.0",
     "connect-flash": "^0.1.1",
-    "connect-mongo": "^6.0.0",
+    "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "ejs": "^5.0.1",
