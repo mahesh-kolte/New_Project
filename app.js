@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV !== "production") {
+ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
@@ -33,13 +33,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// ================= DB CONNECT + SERVER =================
+// ================= MAIN FUNCTION =================
 async function main() {
   try {
     await mongoose.connect(MONGO_URL);
     console.log("✅ Connected to MongoDB");
 
-    // ================= SESSION (NO MongoStore) =================
+    // ================= SESSION =================
     const sessionOptions = {
       secret: process.env.SECRET || "mysupersecret",
       resave: false,
@@ -69,17 +69,18 @@ async function main() {
       next();
     });
 
-    // app.get("/", (req, res) => {
-    //   res.redirect("/listings");
-    // });
-
     // ================= ROUTES =================
     app.use("/listings", listingsRouter);
     app.use("/listings/:id/reviews", reviewRouter);
     app.use("/", userRouter);
 
+    // ================= ROOT ROUTE (FIX 🔥) =================
+    app.get("/", (req, res) => {
+      res.redirect("/listings");
+    });
+
     // ================= ERROR HANDLING =================
-    app.use("/",(req, res, next) => {
+    app.use((req, res, next) => {
       next(new ExpressError(404, "Page Not Found"));
     });
 
@@ -94,10 +95,13 @@ async function main() {
       res.status(statusCode).render("error.ejs", { message });
     });
 
-    // ================= SERVER START =================
-    app.listen(8080, () => {
-      console.log("🚀 Server running on port 8080");
+    // ================= SERVER =================
+    const PORT = process.env.PORT || 8080;
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
     });
+
   } catch (err) {
     console.log("❌ DB Connection Error:", err);
   }
